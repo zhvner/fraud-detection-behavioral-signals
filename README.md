@@ -1,22 +1,22 @@
 # Detecting Fraudulent Financial Activity Using Behavioral Signals and Machine Learning
 
-> A personal research project on synthetic data generation and fraud detection. Built from scratch using Python, scikit-learn, XGBoost, and Oracle.
+> A personal research project on synthetic data generation and fraud detection: built from scratch using Python, scikit-learn, XGBoost, and Oracle.
 
 ---
 
 ## Motivation
 
-During my Data Science Engineering internship at Mastercard, I worked on financial fraud detection and anomaly analysis as part of our team's internal hackathon. That experience sparked my curiosity about how behavioral signals. The way people transact, not just what they transact can reveal fraudulent activity.
+During my Data Science Engineering internship at Mastercard, I worked on financial fraud detection and anomaly analysis as part of our team's internal hackathon. That experience sparked my curiosity about how behavioral signals — the way people transact, not just what they transact — can reveal fraudulent activity.
 
-This project is my independent deep dive into that problem. I designed the entire pipeline from scratch: generating realistic synthetic transaction data, engineering behavioral features, training and comparing ML models, and storing everything in an Oracle-compatible schema. No starter code, no templates, just me exploring how data synthesis and machine learning can tackle fraud detection in fintech.
+This project is my independent deep dive into that problem. I designed the entire pipeline from scratch: generating realistic synthetic transaction data, engineering behavioral features, training and comparing ML models, and storing everything in an Oracle-compatible schema. No starter code, no templates — just me exploring how data synthesis and machine learning can tackle fraud detection in fintech.
 
 ## What I Built
 
-- **Synthetic data generator from scratch**: 50,000 transactions across 2,000 customers with 5 realistic fraud archetypes (card testing, account takeover, bust-out, identity theft, friendly fraud), built using statistical distributions and behavioral modeling
-- **17 engineered behavioral features**: transaction velocity, amount z-scores, geographic mismatches, temporal anomalies, session patterns, and a composite risk score
-- **3 ML models compared**: Logistic Regression, Random Forest, and XGBoost with class-balanced training for imbalanced data
-- **Oracle database layer**: full DDL schema, analytical queries, and bulk-load scripts
-- **End-to-end reproducible pipeline**: one command (`make run-all`) runs everything
+- **Synthetic data generator from scratch** — 50,000 transactions across 2,000 customers with 5 realistic fraud archetypes (card testing, account takeover, bust-out, identity theft, friendly fraud), built using statistical distributions and behavioral modeling
+- **17 engineered behavioral features** — transaction velocity, amount z-scores, geographic mismatches, temporal anomalies, session patterns, and a composite risk score
+- **3 ML models compared** — Logistic Regression, Random Forest, and XGBoost with class-balanced training for imbalanced data
+- **Oracle database layer** — full DDL schema, analytical queries, and bulk-load scripts
+- **End-to-end reproducible pipeline** — one command (`make run-all`) runs everything
 
 ## Why Synthetic Data?
 
@@ -27,12 +27,12 @@ The data generation logic itself is a core contribution of this project — not 
 ## Repository Structure
 
 ```
-fraud-detection-project/
+fraud-detection-behavioral-signals/
 │
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
-├── Makefile                           ← Run pipeline with make commands
+├── Makefile
 │
 ├── configs/
 │   └── config.yaml                    ← Hyperparameters, paths, constants
@@ -41,47 +41,33 @@ fraud-detection-project/
 │   ├── raw/                           ← Generated CSVs (immutable)
 │   │   ├── customers.csv
 │   │   └── transactions.csv
-│   ├── processed/                     ← Train/test splits after feature engineering
-│   └── external/
+│   └── processed/                     ← Train/test splits
+│       ├── train.csv
+│       └── test.csv
 │
-├── notebooks/                         ← Walkthrough notebooks (numbered)
-│   ├── 01_data_generation.ipynb
-│   ├── 02_eda.ipynb
-│   ├── 03_feature_engineering.ipynb
-│   ├── 04_modeling.ipynb
-│   └── 05_evaluation.ipynb
+├── notebooks/
+│   ├── 02_eda.ipynb                   ← Exploratory data analysis
+│   └── 03_modeling.ipynb              ← Feature engineering, training, evaluation
 │
-├── src/                               ← Reusable Python modules
-│   ├── data/
-│   │   ├── generate_dataset.py        ← Synthetic data generator (core of project)
-│   │   └── data_loader.py
-│   ├── features/
-│   │   ├── behavioral_features.py     ← Velocity, timing, geo features
-│   │   └── feature_pipeline.py
-│   ├── models/
-│   │   ├── train.py
-│   │   ├── evaluate.py
-│   │   └── predict.py
-│   ├── visualization/
-│   │   └── plots.py
-│   └── utils/
-│       └── helpers.py
+├── src/
+│   └── data/
+│       └── generate_dataset.py        ← Synthetic data generator (core of project)
 │
-├── sql/                               ← Oracle database layer
-│   ├── ddl/create_tables.sql
-│   ├── queries/fraud_analysis.sql
-│   └── scripts/bulk_load.sql
+├── sql/
+│   ├── ddl/create_tables.sql          ← Oracle schema, indexes, foreign keys
+│   ├── queries/fraud_analysis.sql     ← 8 analytical queries
+│   └── scripts/bulk_load.sql          ← External table CSV import
 │
 ├── tests/
-│   ├── test_data_generation.py
-│   ├── test_features.py
-│   └── test_models.py
+│   └── test_data_generation.py        ← Data validation checks
 │
-├── outputs/                           ← Git-ignored: saved models, figures, results
+├── outputs/                           ← Git-ignored
+│   ├── models/                        ← Saved .pkl model files
+│   ├── figures/                       ← Saved charts from notebooks
+│   └── results/                       ← model_comparison.csv
 │
 └── docs/
-    ├── data_dictionary.json
-    └── reports/final_report.md
+    └── data_dictionary.json           ← Feature descriptions & metadata
 ```
 
 ## Quick Start
@@ -102,16 +88,14 @@ python src/data/generate_dataset.py
 make run-all
 ```
 
-
-
 ## Models & Results
- 
+
 | Model               | ROC-AUC | Precision | Recall | F1-Score |
 |---------------------|---------|-----------|--------|----------|
 | Logistic Regression | 0.9899  | 0.6164    | 0.9457 | 0.7463   |
 | Random Forest       | 0.9949  | 0.9583    | 0.9200 | 0.9388   |
 | XGBoost             | 0.9967  | 0.9471    | 0.9200 | 0.9333   |
- 
+
 > **Random Forest** achieved the best F1-Score (0.94), balancing precision and recall. **XGBoost** had the highest ROC-AUC (0.997). Logistic Regression traded precision for recall — catching 94.6% of fraud but with more false positives.
 
 ## Key Behavioral Features
