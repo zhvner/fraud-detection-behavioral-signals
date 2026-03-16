@@ -511,7 +511,7 @@ def print_dataset_summary(customers_df, transactions_df):
 # ══════════════════════════════════════════════════════════════════════════
 if __name__ == '__main__':
     
-    OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../data/output')
+    OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../data/raw')
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     
     print("\n[1/6] Generating customer profiles...")
