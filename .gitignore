@@ -1,0 +1,10 @@
+```
+data/raw/*.csv
+data/processed/*.csv
+outputs/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+.DS_Store

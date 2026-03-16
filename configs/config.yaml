@@ -1,0 +1,103 @@
+# ============================================================================
+# Project Configuration
+# ============================================================================
+
+project:
+  name: "Fraud Detection - Behavioral Signals"
+  version: "1.0.0"
+
+# ── Data Generation ────────────────────────────────────────────────────────
+data:
+  num_customers: 2000
+  num_transactions: 50000
+  fraud_rate: 0.035
+  start_date: "2024-01-01"
+  end_date: "2025-01-01"
+  random_seed: 42
+  test_size: 0.2
+  validation_size: 0.15
+
+# ── Paths ──────────────────────────────────────────────────────────────────
+paths:
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  models: "outputs/models"
+  figures: "outputs/figures"
+  results: "outputs/results"
+  sql: "sql"
+
+# ── Feature Engineering ────────────────────────────────────────────────────
+features:
+  behavioral_signals:
+    - ip_velocity
+    - session_duration_s
+    - failed_auth_count
+    - is_international
+  temporal_features:
+    - hour_of_day
+    - day_of_week
+    - is_weekend
+    - is_night
+  derived_features:
+    - province_mismatch
+    - amount_zscore
+    - high_velocity_flag
+    - short_session_flag
+    - behavioral_risk_score
+  
+  # Columns to drop before modeling
+  drop_columns:
+    - customer_id
+    - timestamp
+    - txn_province
+    - home_province
+    - cust_avg_amount
+    - cust_std_amount
+
+# ── Model Hyperparameters ──────────────────────────────────────────────────
+models:
+  logistic_regression:
+    C: 1.0
+    penalty: "l2"
+    max_iter: 1000
+    class_weight: "balanced"
+    solver: "lbfgs"
+
+  random_forest:
+    n_estimators: 200
+    max_depth: 12
+    min_samples_split: 10
+    min_samples_leaf: 5
+    class_weight: "balanced"
+    random_state: 42
+    n_jobs: -1
+
+  xgboost:
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    scale_pos_weight: 27  # ~1/fraud_rate
+    eval_metric: "aucpr"
+    random_state: 42
+
+# ── Evaluation ─────────────────────────────────────────────────────────────
+evaluation:
+  metrics:
+    - roc_auc
+    - precision
+    - recall
+    - f1
+    - average_precision
+  threshold_optimization: "f1"  # optimize decision threshold for F1
+  cv_folds: 5
+
+# ── Oracle Database ────────────────────────────────────────────────────────
+oracle:
+  # Update with your Oracle connection details
+  host: "localhost"
+  port: 1521
+  service_name: "FREEPDB1"
+  username: "fraud_user"
+  password: "${ORACLE_PASSWORD}"  # Use environment variable
