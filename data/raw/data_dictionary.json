@@ -1,0 +1,84 @@
+{
+  "project": "Detecting Fraudulent Financial Activity Using Behavioral Signals and ML",
+  "generated": "2026-03-16T00:32:51.760240",
+  "config": {
+    "num_customers": 2000,
+    "num_transactions": 50000,
+    "fraud_rate": 0.035,
+    "date_range": "2024-01-01 to 2025-01-01"
+  },
+  "tables": {
+    "customers": {
+      "rows": 2000,
+      "columns": [
+        "customer_id",
+        "province",
+        "account_age_days",
+        "avg_monthly_spend",
+        "avg_txn_amount",
+        "typical_peak_hour",
+        "preferred_channel",
+        "preferred_device",
+        "risk_score_initial"
+      ]
+    },
+    "transactions": {
+      "rows": 50000,
+      "columns": [
+        "customer_id",
+        "timestamp",
+        "amount",
+        "merchant_category",
+        "channel",
+        "device_type",
+        "txn_province",
+        "home_province",
+        "ip_velocity",
+        "session_duration_s",
+        "failed_auth_count",
+        "is_international",
+        "is_fraud",
+        "hour_of_day",
+        "day_of_week",
+        "is_weekend",
+        "is_night",
+        "province_mismatch",
+        "cust_avg_amount",
+        "cust_std_amount",
+        "amount_zscore",
+        "high_velocity_flag",
+        "short_session_flag",
+        "behavioral_risk_score"
+      ],
+      "label_column": "is_fraud",
+      "fraud_count": 1750,
+      "legit_count": 48250
+    }
+  },
+  "feature_descriptions": {
+    "amount": "Transaction dollar amount",
+    "merchant_category": "Type of merchant (grocery, travel, etc.)",
+    "channel": "Transaction channel (mobile, web, POS, ATM, phone)",
+    "device_type": "Device used (ios, android, desktop, unknown)",
+    "ip_velocity": "Number of transactions from same IP in recent window",
+    "session_duration_s": "Duration of user session in seconds",
+    "failed_auth_count": "Number of failed authentication attempts before this txn",
+    "is_international": "Whether transaction originated internationally",
+    "hour_of_day": "Hour of transaction (0-23)",
+    "day_of_week": "Day of week (0=Monday, 6=Sunday)",
+    "is_weekend": "Binary flag for Saturday/Sunday",
+    "is_night": "Binary flag for 10pm-5am transactions",
+    "province_mismatch": "Binary flag: transaction province != home province",
+    "amount_zscore": "Z-score of amount relative to customer average",
+    "high_velocity_flag": "Binary flag: ip_velocity > 5",
+    "short_session_flag": "Binary flag: session < 15 seconds",
+    "behavioral_risk_score": "Composite risk score (0-1) from behavioral signals"
+  },
+  "fraud_patterns": [
+    "card_testing: Many small transactions, high velocity, unusual hours",
+    "account_takeover: Different device/location, large amounts",
+    "bust_out: Gradual escalation then large purchase",
+    "identity_theft: New device, odd hours, different province",
+    "friendly_fraud: Normal-looking but disputed later"
+  ]
+}
