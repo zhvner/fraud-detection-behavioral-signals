@@ -102,15 +102,17 @@ python src/data/generate_dataset.py
 make run-all
 ```
 
-## Models & Results
 
+
+## Models & Results
+ 
 | Model               | ROC-AUC | Precision | Recall | F1-Score |
 |---------------------|---------|-----------|--------|----------|
-| Logistic Regression | —       | —         | —      | —        |
-| Random Forest       | —       | —         | —      | —        |
-| XGBoost             | —       | —         | —      | —        |
-
-> Results will be filled in after running the full pipeline.
+| Logistic Regression | 0.9899  | 0.6164    | 0.9457 | 0.7463   |
+| Random Forest       | 0.9949  | 0.9583    | 0.9200 | 0.9388   |
+| XGBoost             | 0.9967  | 0.9471    | 0.9200 | 0.9333   |
+ 
+> **Random Forest** achieved the best F1-Score (0.94), balancing precision and recall. **XGBoost** had the highest ROC-AUC (0.997). Logistic Regression traded precision for recall — catching 94.6% of fraud but with more false positives.
 
 ## Key Behavioral Features
 
